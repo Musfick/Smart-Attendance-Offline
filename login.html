@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Teacher Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/glyphicon.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/nprogress.css">
+    <link rel="stylesheet" href="css/jquery.toast.css">
+</head>
+<body>
+         <!-- As a heading -->
+         <nav class="navbar navbar-dark bg-white shadow-sm">
+                <a class="navbar-brand">
+                  <img id="avater" src="image/avataricon.png" alt="Avatar" style="width:60px">
+                  <span id="teachername" class="navbar-brand mb-0 h1 text-dark">Teacher Portal</span>
+                  <div id="togglebtnui" style ="display: none;" class="btn-group btn-group-toggle" data-toggle="buttons">
+                      <label id="attendancepageid" class="btn btn-secondary active">
+                        <input type="radio" name="options" id="option1" autocomplete="off" checked> Attendance
+                      </label>
+                      <label id="reportpageid" class="btn btn-secondary">
+                        <input type="radio" name="options" id="option2" autocomplete="off"> Report
+                      </label>
+                    </div>
+                </a>
+                
+
+                <div id="logbtnui" style ="display: none;" class="form-inline">
+                  <button id="add-student-btn" class="btn btn-outline-success my-2 my-sm-0 m-2" type="submit">Add Student</button>
+                  <button onclick="loginApp.logout()" class="btn btn-outline-warning" type="submit">Log out</button>
+                </div>
+        </nav>
+
+        
+        <div id="conatinerid"  class="container-fluid p-5" style ="display: none;">
+
+          <!-- Section Select -->
+          <div id="datesectionui" style ="display: none;" class="p-3">
+              <div class="card shadow-sm ">
+                  <div class="card-header text-center ">
+                    Attendance Settings
+                  </div>
+                  <div class="card-body">
+                      <div class="form-row">
+                          <div class="form-group col-md-6">
+                          <!-- This is datepicker -->
+                          <label for="inputEmail4">Select Date</label>
+                          <input id="get-dateinput" class="form-control" id="date" name="date" placeholder="MM-DD-YYYY" type="text"/>
+                          </div>
+                          <!-- This is section select -->
+                          <div class="form-group col-md-6">
+                              <label for="inputState">Select Section</label>
+                              <select id="section-input" class="form-control">
+                                  <option selected>Choose...</option>
+                                  <option value="A">A</option>
+                                  <option value="B">B</option>
+                                  <option value="C">C</option>
+                                  <option value="D">D</option>
+                                  <option value="E">E</option>
+                                  <option value="F">F</option>
+                              </select>
+                          </div>
+                      </div>
+                      <!-- This is generate button -->
+                      <button id="qr-code-generate-btn" type="submit" class="btn btn-primary">Generate QR Code</button>
+                      <button id="qr-view-btn" type="button" class="btn btn-secondary" disabled> <span class="glyphicon glyphicon-qrcode"></span></button>
+                      
+                  </div>
+                </div>
+          </div>
+
+            
+
+              <!-- Student Table -->
+          <div id="studenttableui" style ="display: none;" class="p-3">
+                  <div class="card shadow-sm ">
+                      <div class="card-header text-center">
+                        <div class=" form-inline text-center">
+                          <div class="col-sm ">
+                              <div id="Tstudent-counter" class="font-weight-blod h3">0</div>
+                              <div class="font-weight-light h4">Total Student</div>
+                          </div>
+                          <div class="col-sm">
+                              <div id="Astudent-counter" class="font-weight-blod h3">0</div>
+                              <div class="font-weight-light h4">Attend</div>
+                          </div>
+                          <div class="col-sm">
+                              <div id="Abstudent-counter" class="font-weight-blod h3">0</div>
+                              <div class="font-weight-light h4">Absent</div>
+                          </div>
+                      </div>
+                      </div>
+                      <div class="card-body">
+                          <input type="hidden" id="total_count">
+                          <table id="atttable" class="table ">		
+                              <thead class="thead">
+                              <tr>
+                                <th>Attendance</th>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Address</span></th>
+                                <th>Delete</th>
+                              </tr>
+                            </thead>
+                            <tbody>			
+                            </tbody>
+                          </table>
+
+                          <button id="save-btn" class="btn btn-success"><i class="glyphicon glyphicon-save"></i>Save</button>
+                          <button id="delete-btn" style="float: right;" type="button" class="btn btn-secondary text-rigth" disabled> <span class="glyphicon glyphicon-trash"></span></button>
+
+                      </div>
+                    </div>
+              </div>
+
+             <!-- Report Section Select -->
+             <div id="setreportui" class="p-3" style ="display: none;">
+              <div class="card shadow-sm ">
+                  <div class="card-header text-center ">
+                    Report Settings
+                  </div>
+                  <div class="card-body">
+                      <div class="form-row">
+                          <!-- This is section select -->
+                      <div class="form-group col-md">
+                        <label for="inputState">Select Section</label>
+                        <select id="report-section-input" class="form-control">
+                            <option selected>Choose...</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                        </select>
+                    </div>
+                      </div>
+                      <!-- This is generate button -->
+                  <button id="report-btn" type="submit" class="btn btn-primary">Report</button>
+                      
+                  </div>
+                </div>
+          </div>
+
+          <!-- Student Attendance History -->
+          <div id="studentreportui" class="p-3" style ="display: none;">
+            <div class="card shadow-sm ">
+                <div class="card-header text-center">
+                  Attendance Report
+                </div>
+                <div class="card-body">
+                  <table id="reporttable" class="table table-bordered table-hover text-center">		
+                    <thead class="thead-light">
+                    <tr>
+                      <th>#</th>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>View</th>
+                      <th>Attend</th>
+                      <th>Absent</th>
+                      <th>Total Class</th>
+                    </tr>
+                  </thead>
+                  <tbody>			
+                  </tbody>
+                </table>
+
+                </div>
+              </div>
+        </div>
+
+
+              
+              
+        </div>
+
+        
+
+
+        
+        <!-- Login form -->
+        <div id="loginui" style ="display: none;" class="container">
+                                <div class="row">
+                                  <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                                    <div class="card card-signin my-5">
+                                      <div class="card-body">
+                                        <h5 class="card-title text-center">Sign In</h5>
+                                        <form class="form-signin">
+                                                        <div id="loader">Loading...</div>
+                                                        <div id="firebaseui-auth-container"></div>
+                                          <hr class="my-4">
+                                        </form>
+                                        <h5 class="card-title text-center">Qr Code</h5>
+                                        <div class="text-center" id="image"></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+        </div>
+
+        <!-- Modal -->
+    <div class="modal fade" id="pop_up" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Student</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="form-model">
+              <div class="form-group">
+                <label for="student-id" class="col-form-label">Student ID:</label>
+                <input type="text" class="form-control" id="input-student-id">
+              </div>
+              <div class="form-group">
+                  <label for="student-name" class="col-form-label">Student Name:</label>
+                  <input type="text" class="form-control" id="input-student-name">
+                </div>
+              <div class="form-group">
+                  <label for="inputState">Select Section</label>
+                  <select id="input-student-section" class="form-control">
+                      <option selected>Choose...</option>
+                      <option value="A">A</option>
+                      <option value="B">B</option>
+                      <option value="C">C</option>
+                      <option value="D">D</option>
+                      <option value="E">E</option>
+                      <option value="F">F</option>
+                  </select>
+              </div>
+              <input type="hidden" id='hidden_id' />
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button id="model-reset-btn" type="button" class="btn btn-danger">Reset</button>
+            <button id="model-save-btn" type="button" class="btn btn-primary" data-loading-text="Loading...">Submit</button>
+            <div    id="spinner-id" class="loader" style="float: right;"></div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <!-- Model -->
+  <div class="modal fade" id="pop_up_report" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+
+            <h5 class="student-name_report" id="exampleModalLabel"></h5>
+
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <div class="container-fluid col-8">
+                      <table class="table-view table-sm table-bordered text-center">		
+                              <thead class="thead-light">
+                              <tr>
+                                <th>#</th>
+                                <th>Date</th>
+                                <th>Attendance</th>
+                                
+                              </tr>
+                            </thead>
+                            <tbody>			
+                            </tbody>
+                      </table>
+              </div>
+                  
+          </div>
+          <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <!-- The Modal -->
+  <div id="myModal" class="image-modal">
+    <span class="image-close">&times;</span>
+    <img class="image-modal-content" id="img01">
+</div>
+
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/login.js"></script>
+    <script src="js/nprogress.js"></script>
+    <script src="js/jquery.toast.js"></script>
+    <script src="js/jquery.counterup.min.js"></script>
+    <script src="js/jquery.waypoints.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Attendance Report</title>
+    <script src="https://www.gstatic.com/firebasejs/5.7.1/firebase.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/glyphicon.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-light">
+
+
+    <!-- As a heading -->
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <a class="navbar-brand">
+                <img id="avater-id" alt="Avatar" style="width:50px">
+            <span id="teacher-name" class="navbar-brand mb-0 h1 " style="font-size:20px;"></span>
+            </a>
+            <div class="collapse navbar-collapse" id="navbarText">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item ">
+                  <a class="nav-link" href="main.html">Attendance </a>
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link" href="report.html">Attendance Report <span class="sr-only">(current)</span> </a>
+                </li>
+                
+              </ul>
+              <div class="form-inline">
+                <button onclick="reportApp.logout()" class="btn btn-outline-light my-2 my-sm-0" type="submit">Log out</button>
+            </div>
+            </div>
+    </nav>
+
+    <!-- container -->
+    <div class="container p-3">
+        <div class="shadow-sm p-3 mb-5 bg-white rounded" >
+            <div class="form-row">
+                <!-- This is section select -->
+                <div class="form-group col-md">
+                    <label for="inputState">Select Section</label>
+                    <select id="section-input" class="form-control">
+                        <option selected>Choose...</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                    </select>
+                </div>
+            </div>
+            <!-- This is generate button -->
+            <button id="report-btn" type="submit" class="btn btn-primary">Report</button>
+    </div>
+    <div class="shadow-sm p-3 mb-5 bg-white rounded" >
+            <caption>List of Students</caption>
+            <table class="table table-bordered table-hover text-center">		
+                <thead class="thead-light">
+                <tr>
+                  <th>#</th>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>View</th>
+                  <th>Attend</th>
+                  <th>Absent</th>
+                  <th>Total Class</th>
+                </tr>
+              </thead>
+              <tbody>			
+              </tbody>
+            </table>
+
+    </div>
+
+    <!-- Model -->
+    <div class="modal fade" id="pop_up" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+      
+                  <h5 class="student-name" id="exampleModalLabel">Student Attendance</h5>
+
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="container-fluid col-8">
+                            <table class="table-view table-sm table-bordered text-center">		
+                                    <thead class="thead-light">
+                                    <tr>
+                                      <th>#</th>
+                                      <th>Date</th>
+                                      <th>Attend</th>
+                                      <th>Absent</th>
+                                      
+                                    </tr>
+                                  </thead>
+                                  <tbody>			
+                                  </tbody>
+                            </table>
+                    </div>
+                        
+                </div>
+                <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+        </div>
+    
+</div>
+
+
+
+
+
+
+
+
+
+        <script src="js/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/firebase.js"></script>
+        <script src="js/report.js"></script>
+        <script src="js/jquery.counterup.min.js"></script>
+        <script src="js/jquery.waypoints.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+</body>
+</html>
